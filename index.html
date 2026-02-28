@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Glassmorphic Calculator</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body>
+    <div class="bg-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+
+    <main class="calculator" id="calculator">
+      <!-- Header -->
+      <header class="header">
+        <div class="controls">
+          <button class="control-btn" id="theme-toggle" title="Toggle Dark/Light">
+            <i data-lucide="sun"></i>
+          </button>
+          <button class="control-btn" id="sci-toggle" title="Scientific Mode">
+            <i data-lucide="flask-conical"></i>
+          </button>
+          <button class="control-btn" id="voice-btn" title="Voice Input">
+            <i data-lucide="mic"></i>
+          </button>
+        </div>
+        <div class="controls">
+          <button class="control-btn" id="mode-toggle" title="Switch Mode">
+            <i data-lucide="layers"></i>
+          </button>
+          <button class="control-btn" id="history-toggle" title="History">
+            <i data-lucide="history"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Display -->
+      <section class="display-container">
+        <div class="display-top">
+          <div class="memory-indicator" id="memory-indicator"></div>
+          <div class="display-actions">
+            <button class="action-icon" id="copy-btn" title="Copy Result"><i data-lucide="copy"></i></button>
+            <button class="action-icon" id="share-btn" title="Share Result"><i data-lucide="share-2"></i></button>
+          </div>
+        </div>
+        <div class="history-preview" id="history-preview"></div>
+        <div class="current-input" id="current-input">0</div>
+      </section>
+
+      <!-- Mode Selector (Dropdown/Overlay) -->
+      <div class="mode-overlay hidden" id="mode-overlay">
+        <div class="mode-card">
+          <h3>Select Mode</h3>
+          <div class="mode-options">
+            <button class="mode-opt active" data-mode="calc"><i data-lucide="calculator"></i> Calculator</button>
+            <button class="mode-opt" data-mode="graph"><i data-lucide="line-chart"></i> Graph Preview</button>
+            <button class="mode-opt" data-mode="currency"><i data-lucide="banknote"></i> Currency</button>
+            <button class="mode-opt" data-mode="unit"><i data-lucide="ruler"></i> Unit Converter</button>
+            <button class="mode-opt" data-mode="theme"><i data-lucide="palette"></i> Themes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Graph Panel -->
+      <section class="graph-container hidden" id="graph-container">
+        <div class="graph-header">
+          <span>Graph Preview: <small id="graph-func"></small></span>
+          <button class="close-btn" id="close-graph"><i data-lucide="x"></i></button>
+        </div>
+        <div id="graph-plot"></div>
+      </section>
+
+      <!-- Currency Converter -->
+      <section class="converter-container hidden" id="currency-container">
+        <div class="conv-row">
+          <input type="number" id="curr-amount" value="1">
+          <select id="curr-from">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="INR">INR</option>
+            <option value="JPY">JPY</option>
+          </select>
+        </div>
+        <div class="conv-divider"><i data-lucide="arrow-down-up"></i></div>
+        <div class="conv-row">
+          <div class="conv-result" id="curr-result">0.00</div>
+          <select id="curr-to">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+            <option value="INR">INR</option>
+            <option value="JPY">JPY</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Unit Converter -->
+      <section class="converter-container hidden" id="unit-container">
+        <div class="conv-type-select">
+          <select id="unit-type">
+            <option value="length">Length</option>
+            <option value="weight">Weight</option>
+            <option value="temp">Temperature</option>
+          </select>
+        </div>
+        <div class="conv-row">
+          <input type="number" id="unit-amount" value="1">
+          <select id="unit-from"></select>
+        </div>
+        <div class="conv-divider"><i data-lucide="arrow-down-up"></i></div>
+        <div class="conv-row">
+          <div class="conv-result" id="unit-result">0.00</div>
+          <select id="unit-to"></select>
+        </div>
+      </section>
+
+      <!-- Theme Customization Section -->
+      <section class="theme-container hidden" id="theme-container">
+        <div class="theme-options">
+          <div class="theme-group">
+            <label>Accent Color</label>
+            <div class="color-grid">
+              <div class="color-swatch" style="background: #38bdf8;" data-color="#38bdf8"></div>
+              <div class="color-swatch" style="background: #f43f5e;" data-color="#f43f5e"></div>
+              <div class="color-swatch" style="background: #10b981;" data-color="#10b981"></div>
+              <div class="color-swatch" style="background: #f59e0b;" data-color="#f59e0b"></div>
+              <div class="color-swatch" style="background: #8b5cf6;" data-color="#8b5cf6"></div>
+              <div class="color-swatch" style="background: #ec4899;" data-color="#ec4899"></div>
+            </div>
+          </div>
+          <div class="theme-group">
+            <label>Glass Blur</label>
+            <input type="range" id="blur-range" min="0" max="40" value="12">
+          </div>
+          <div class="theme-group">
+            <label>Glass Opacity</label>
+            <input type="range" id="opacity-range" min="5" max="95" value="10">
+          </div>
+        </div>
+      </section>
+
+      <!-- Scientific Buttons (Hidden by default) -->
+      <section class="scientific-grid">
+        <button class="calc-btn scientific-btn" data-action="sin">sin</button>
+        <button class="calc-btn scientific-btn" data-action="cos">cos</button>
+        <button class="calc-btn scientific-btn" data-action="tan">tan</button>
+        <button class="calc-btn scientific-btn" data-action="fact">n!</button>
+        <button class="calc-btn scientific-btn" data-action="log">log</button>
+        <button class="calc-btn scientific-btn" data-action="ln">ln</button>
+        <button class="calc-btn scientific-btn" data-action="pi">π</button>
+        <button class="calc-btn scientific-btn" data-action="e">e</button>
+      </section>
+
+      <!-- Main Buttons -->
+      <section class="buttons-grid">
+        <!-- Row 1: Memory & Clear -->
+        <button class="calc-btn operator" data-action="mc">MC</button>
+        <button class="calc-btn operator" data-action="mr">MR</button>
+        <button class="calc-btn operator" data-action="m-plus">M+</button>
+        <button class="calc-btn clear" data-action="clear">AC</button>
+
+        <!-- Row 2: Advanced Math -->
+        <button class="calc-btn operator" data-action="sqrt">√</button>
+        <button class="calc-btn operator" data-action="sqr">x²</button>
+        <button class="calc-btn operator" data-value="^">xʸ</button>
+        <button class="calc-btn operator" data-value="/">÷</button>
+
+        <!-- Row 3: Numbers & Operators -->
+        <button class="calc-btn" data-value="7">7</button>
+        <button class="calc-btn" data-value="8">8</button>
+        <button class="calc-btn" data-value="9">9</button>
+        <button class="calc-btn operator" data-value="*">×</button>
+
+        <!-- Row 4 -->
+        <button class="calc-btn" data-value="4">4</button>
+        <button class="calc-btn" data-value="5">5</button>
+        <button class="calc-btn" data-value="6">6</button>
+        <button class="calc-btn operator" data-value="-">-</button>
+
+        <!-- Row 5 -->
+        <button class="calc-btn" data-value="1">1</button>
+        <button class="calc-btn" data-value="2">2</button>
+        <button class="calc-btn" data-value="3">3</button>
+        <button class="calc-btn operator" data-value="+">+</button>
+
+        <!-- Row 6 -->
+        <button class="calc-btn" data-action="plus-minus">±</button>
+        <button class="calc-btn" data-value="0">0</button>
+        <button class="calc-btn" data-value=".">.</button>
+        <button class="calc-btn equals" data-action="calculate">=</button>
+
+        <!-- Row 7: Brackets & Delete -->
+        <button class="calc-btn operator" data-value="(">(</button>
+        <button class="calc-btn operator" data-value=")">)</button>
+        <button class="calc-btn operator" data-value="%">%</button>
+        <button class="calc-btn operator" data-action="delete">⌫</button>
+      </section>
+
+      <!-- History Panel -->
+      <aside class="side-panel" id="history-panel">
+        <div class="panel-header">
+          <h3>History</h3>
+          <button class="control-btn" id="close-history"><i data-lucide="x"></i></button>
+        </div>
+        <div class="history-list" id="history-list">
+          <!-- History items injected here -->
+        </div>
+        <button class="calc-btn clear" id="clear-history" style="margin-top: 10px; width: 100%;">Clear All</button>
+      </aside>
+    </main>
+
+    <script type="module" src="/src/script.ts"></script>
+    <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
+
