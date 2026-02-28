@@ -1,8 +1,5 @@
-node_modules/
-build/
-dist/
-coverage/
-.DS_Store
-*.log
-.env*
-!.env.example
+{
+  "name": "Glassmorphic Advanced Calculator",
+  "description": "A feature-rich scientific calculator with glassmorphism UI, history, memory functions, and dark/light mode.",
+  "requestFramePermissions": []
+}
