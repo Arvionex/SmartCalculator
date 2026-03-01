@@ -272,25 +272,30 @@ button.scientific-btn {
 /* Side Panels (History & Theme) */
 .side-panel {
   position: absolute;
-  top: 0;
-  right: -310px;
-  width: 300px;
-  height: 100%;
-  background: var(--glass-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  inset: 0;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border: 1px solid var(--glass-border);
   border-radius: 24px;
-  padding: 20px;
-  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 25px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 100;
   display: flex;
   flex-direction: column;
-  box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+[data-theme="light"] .side-panel {
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .side-panel.open {
-  right: 0;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .panel-header {
@@ -298,17 +303,24 @@ button.scientific-btn {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding-bottom: 10px;
   border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 15px;
 }
 
 .panel-header h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--accent-color);
 }
 
-/* Theme Panel Specifics */
+/* Theme Customization Section */
+.theme-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+}
+
 .theme-options {
   display: flex;
   flex-direction: column;
@@ -505,28 +517,51 @@ input[type="range"] {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-right: 5px;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 10px;
+  opacity: 0.5;
 }
 
 .history-item {
-  padding: 10px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
+  padding: 15px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .history-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+  border-color: var(--accent-color);
 }
 
 .history-exp {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
+  font-family: var(--font-mono);
 }
 
 .history-res {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 /* Responsive */
@@ -537,16 +572,6 @@ input[type="range"] {
   
   .calculator.scientific .scientific-grid {
     grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .history-panel {
-    right: -100%;
-    width: 100%;
-    border-radius: 24px;
-  }
-  
-  .history-panel.open {
-    right: 0;
   }
 }
 
